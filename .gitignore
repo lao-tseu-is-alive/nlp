@@ -130,3 +130,5 @@ dmypy.json
 
 # jetbrain IDE
 .idea/
+/resources/
+/contacts.txt
