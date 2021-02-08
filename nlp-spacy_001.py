@@ -3,7 +3,7 @@ import numpy as np
 import spacy
 
 
-def py_version(name):
+def py_version():
     # Use a breakpoint in the code line below to debug your script.
     print(f'Python version : {sys.version}')  # Press Ctrl+F8 to toggle the breakpoint.
     print(f'Numpy  version : {spacy.__version__}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -11,7 +11,7 @@ def py_version(name):
 
 
 if __name__ == '__main__':
-    py_version('PyCharm')
+    py_version()
 
     # Load English tokenizer, tagger, parser and NER
     nlp = spacy.load("en_core_web_sm")
