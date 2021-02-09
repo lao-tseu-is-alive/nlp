@@ -1,5 +1,7 @@
 import re
 
+VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH = 'data/pg17489.txt'
+
 
 def get_lines_from_file(file_path, file_encoding='utf-8'):
     """reads a text file at file_path, with specified file_encoding
@@ -39,7 +41,7 @@ def print_book_sections_indices(lines_array, section_regex=r'^Livre (.+)\-\-(.+)
     print_indices_text(lines_array, my_sections_indices)
 
 
-def get_dict_book_parts(lines_array, section_regex=r'^Livre (.+)\-\-(.+)$'):
+def get_dict_book_parts(lines_array, section_regex=r'^Livre (.+)\-\-(.+)$', remove_title_lines=True):
     my_sections_indices = get_indices_for_regex(lines_array, section_regex)
     my_sections = {}
     for i, v in enumerate(my_sections_indices):
@@ -47,10 +49,23 @@ def get_dict_book_parts(lines_array, section_regex=r'^Livre (.+)\-\-(.+)$'):
         key = f'{i + 1:0>{2}}) {lines_array[v]}'
         # print(key, i < (len(my_sections_indices) - 1))
         if i < (len(my_sections_indices) - 1):
-            my_sections[key] = lines_array[v:my_sections_indices[i + 1]]
+            if remove_title_lines:
+                my_sections[key] = lines_array[v + 1:my_sections_indices[i + 1]]
+            else:
+                my_sections[key] = lines_array[v:my_sections_indices[i + 1]]
         else:
             my_sections[key] = lines_array[v:]
     return my_sections
+
+
+def get_chapters_dic_of_first_section_of_french_book(gutenberg_file_path=VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH):
+    all_book = get_real_book_from_gutenberg_file(VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH, offset=5)
+    REAL_BEGIN_OF_BOOK = 117  # first index after the table of contents
+    my_book = all_book[REAL_BEGIN_OF_BOOK:]
+    my_book_sections = get_dict_book_parts(my_book, section_regex=r'^Livre (.+)\-\-(.+)$')
+    my_first_section = my_book_sections['01) Livre premier--Un juste']
+    return get_dict_book_parts(my_first_section, section_regex=r'^Chapitre\s([IVX]+)$')
+
 
 
 if __name__ == '__main__':
@@ -95,7 +110,8 @@ if __name__ == '__main__':
     print(f"## OK : let's print all sections indices of the book")
     print_book_sections_indices(my_gutenberg_book)
     REAL_BEGINNING_OF_BOOK = 117  # indices after table of contents
-    print(f"## OK : let's keep only the lines of the real sections, starting from index {REAL_BEGINNING_OF_BOOK} upwards")
+    print(
+        f"## OK : let's keep only the lines of the real sections, starting from index {REAL_BEGINNING_OF_BOOK} upwards")
     my_gutenberg_book = my_gutenberg_book[117:]
     my_offset = 8
     print(f"## OK : let's print {my_offset} first and last lines of all the book")
