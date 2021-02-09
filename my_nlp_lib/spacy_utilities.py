@@ -1,4 +1,13 @@
 import spacy
+import os
+import sys
+
+
+def print_versions():
+    print(f'Python version : {sys.version:<{10}}')
+    print(f'Spacy version  : {spacy.__version__:<{10}}')
+    current_dir_path = os.path.dirname(os.path.realpath(os.getcwd()))
+    print(f'Current dir : {current_dir_path:.>{15}}')
 
 
 def print_token_info(spacy_doc):
@@ -39,3 +48,6 @@ if __name__ == '__main__':
     print_token_info(doc)
     print(f'{"PART OF SPEECH (POS) TOKEN FREQUENCY":*^{60}}')
     print_token_pos_frequency(doc)
+
+    print_versions()
+
