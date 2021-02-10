@@ -58,14 +58,14 @@ def get_dict_book_parts(lines_array, section_regex=r'^Livre (.+)\-\-(.+)$', remo
     return my_sections
 
 
-def get_chapters_dic_of_first_section_of_french_book(gutenberg_file_path=VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH):
+def get_chapters_dic_of_first_section_of_french_book(
+        gutenberg_file_path=VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH):
     all_book = get_real_book_from_gutenberg_file(VICTOR_HUGO_LES_MISERABLES_TOME_1_FANTINE_FILE_PATH, offset=5)
     REAL_BEGIN_OF_BOOK = 117  # first index after the table of contents
     my_book = all_book[REAL_BEGIN_OF_BOOK:]
     my_book_sections = get_dict_book_parts(my_book, section_regex=r'^Livre (.+)\-\-(.+)$')
     my_first_section = my_book_sections['01) Livre premier--Un juste']
     return get_dict_book_parts(my_first_section, section_regex=r'^Chapitre\s([IVX]+)$')
-
 
 
 if __name__ == '__main__':

@@ -42,6 +42,16 @@ def print_token_pos_frequency(spacy_doc):
               f' {v:>{4}} ({v/total_tokens:.2%})')
 
 
+def print_entities_in_sentence(spacy_doc):
+    for i, sentence in enumerate(spacy_doc.sents):
+        phrase = nlp(sentence.text)
+        if phrase.ents:
+            print(f'##### [{i:0>{3}}] ENTITY FOUND IN THIS SENTENCE :')
+            displacy.render(phrase, style='ent', jupyter=True)
+        else:
+            print(f"##### [{i:0>{3}}] NO ENTITY FOUND IN THIS SENTENCE :\n{phrase.text}")
+
+
 if __name__ == '__main__':
     nlp = spacy.load("en_core_web_sm")
     doc = nlp("Apple is looking at buying U.K. startup for $1 billion !")
